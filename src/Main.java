@@ -1,11 +1,19 @@
 import java.util.*;
+import java.util.Scanner;
 public class Main {
-    public static void main(String input)
-    {
-        Calculate(input);
+    public static void main(String[] args) {
 
+        while (true)
+        {
+            Scanner in = new Scanner(System.in);
+            System.out.print("Input a mathematical equation : \n");
+            String input = in.nextLine();
+            String ans =  calc( input ) ;
+            System.out.print(ans);
+            System.out.print("\n");
+        }
 
-        /* String[] ask = {"1","2","3","4","5","6","7","8","9","10","II","III","IV","V","VI","VII","VIII","IX","X"};
+        /*String[] ask = {"1","2","3","4","5","6","7","8","9","10","II","III","IV","V","VI","VII","VIII","IX","X"};
         String[] ops = {" + ", " / "," - "," * "};
         for (int i = 0 ; i < ask.length; i++)
         {
@@ -15,44 +23,44 @@ public class Main {
                 {
                     String input = ask[i] + ops[k] + ask[j];
                     System.out.println(input);
-                    Calculate(input);
+                    System.out.println(calc(input));
                 }
             }
-        }
+            }
 
          */
     }
-    public static void Calculate(String input)
+
+    public static String calc(String input)
     {
         input = input.replaceAll(" ", "");
-        if (!IsCorrectInput(input)) {System.out.println("throws Exception // Некорректный ввод"); return;}
-        if (!IsCorrectOperation(input)) {System.out.println("throws Exception // Некорректная операция  "); return;}
-        if (!IsCorrectCalculusSystem(input)) {System.out.println("throws Exception // Разные системы счисления "); return;}
+        if (!IsCorrectInput(input)) {return "throws Exception // Некорректный ввод";}
+        if (!IsCorrectOperation(input)) {return ("throws Exception // Некорректная операция  ");}
+        if (!IsCorrectCalculusSystem(input)) {return("throws Exception // Разные системы счисления "); }
         String operation = FindOperation(input);
         String[] nums = input.split(operation);
-        boolean flag = IsCorrectRomeSystem(nums[0]);
         if (IsCorrectArabicSystem(nums[0]) && IsCorrectArabicSystem(nums[1]))
         {
             int ans = DoOperation( Integer.parseInt(nums[0]), Integer.parseInt(nums[1]),operation);
 
-            System.out.println(ans); return;
+             return Integer.toString(ans);
         }
         else if (IsCorrectRomeSystem(nums[0]) && IsCorrectRomeSystem(nums[1]))
         {
             int ans = DoOperation ( RomeToInt(nums[0]), RomeToInt(nums[1]), operation) ;
             if (ans < 1)
             {
-                System.out.println("throws Exception //  Римские цифры могут быть только положительными"); return;
+                return("throws Exception //  Римские цифры могут быть только положительными");
             }
-            System.out.println(IntegerConverter.intToRoman(ans)); return;
+            return (IntegerConverter.intToRoman(ans));
         }
         else
         {
-            System.out.println("throws Exception // Некоректные числа"); return;
+            return("throws Exception // Некоректные числа");
         }
 
     }
-    public static boolean IsInArray(char [] line, char  chr)
+     static boolean IsInArray(char [] line, char  chr)
     {
         for (int i = 0 ; i < line.length ; i++)
         {
@@ -64,7 +72,7 @@ public class Main {
         }
         return false;
     }
-    public static boolean IsInArray(String [] line, String  chr)
+     static boolean IsInArray(String [] line, String  chr)
     {
         for (int i = 0 ; i < line.length ; i++)
         {
@@ -76,7 +84,7 @@ public class Main {
         }
         return false;
     }
-    public static boolean IsCorrectCalculusSystem(String args)
+     static boolean IsCorrectCalculusSystem(String args)
     {
         boolean arabic_flag = false;
         boolean roman_flag = false;
@@ -106,7 +114,7 @@ public class Main {
         }
         return true;
     }
-    public static int RomeToInt (String rome_num)
+     static int RomeToInt (String rome_num)
     {
         int arabic_num = 0;
         int count = 0;
@@ -132,16 +140,16 @@ public class Main {
 
         return arabic_num;
     }
-    public static boolean IsCorrectRomeSystem(String rome_num)
+     static boolean IsCorrectRomeSystem(String rome_num)
     {
         String[] nums = {"I","II","III","IV","V","VI","VII","VIII","IX","X"};
 
         return IsInArray(nums,rome_num);
     }
-    public static boolean IsCorrectArabicSystem(String arabic_num)
+     static boolean IsCorrectArabicSystem(String arabic_num)
     {
         try {
-            return Integer.parseInt(arabic_num) < 11;
+            return Integer.parseInt(arabic_num) < 11 && Integer.parseInt(arabic_num) > 0 ;
         }
         catch ( Exception e)
         {
@@ -154,9 +162,9 @@ public class Main {
         return false;
 
     }
-    public static boolean IsCorrectInput(String args)
+     static boolean IsCorrectInput(String args)
     {
-        if (args.length() == 0 ) return false;
+        if (args.length() < 3 ) return false;
         char[] allowed_chars = {'+','-','/','*','1','2','3','4','5','6','7','8','9','0','I','V','X'};
         for (int i = 0 ; i < args.length() ; i++)
         {
@@ -164,7 +172,7 @@ public class Main {
         }
         return  true;
     }
-    public static boolean IsCorrectOperation(String args)
+     static boolean IsCorrectOperation(String args)
     {
         char[] operations = {'+','-','/','*'};
         boolean is_find = false;
@@ -178,7 +186,7 @@ public class Main {
         }
         return is_find;
     }
-    public static String FindOperation(String args)
+     static String FindOperation(String args)
     {
         char[] operations = {'+','-','/','*'};
         for (int i = 0 ; i < args.length() ; i++)
@@ -194,7 +202,7 @@ public class Main {
 
     }
 
-    public static int DoOperation(int num_1, int num_2, String operation)
+     static int DoOperation(int num_1, int num_2, String operation)
     {
         int result = 0;
         if (Objects.equals(operation , "/")) result = num_1 / num_2;
@@ -206,7 +214,7 @@ public class Main {
 
      class IntegerConverter {
 
-        public static String intToRoman(int number) {
+         static String intToRoman(int number) {
             if (number >= 4000 || number <= 0)
                 return "";
             StringBuilder result = new StringBuilder();
@@ -219,7 +227,7 @@ public class Main {
             return result.toString();
         }
 
-        private static final NavigableMap<Integer, String> units;
+         static final NavigableMap<Integer, String> units;
         static {
             NavigableMap<Integer, String> initMap = new TreeMap<>();
             initMap.put(1000, "M");
